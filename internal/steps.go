@@ -98,9 +98,13 @@ func Validate(c Company) error {
 func Transform(c *Company) {
 	c.CountryCode = strings.ToUpper(c.CountryCode)
 
+	if len(c.Organization) > 0 && c.Organization[0] >= 'A' && c.Organization[0] <= 'Z' {
+		return
+	}
+
 	org := []rune(c.Organization)
 
-	if len(org) > 0 && !unicode.IsUpper(org[0]) {
+	if !unicode.IsUpper(org[0]) {
 		org[0] = unicode.ToUpper(org[0])
 		c.Organization = string(org)
 	}

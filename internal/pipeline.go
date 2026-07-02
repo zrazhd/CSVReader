@@ -24,6 +24,7 @@ func Run(path string) (Stats, error) {
 	defer file.Close()
 
 	reader := csv.NewReader(file)
+	reader.ReuseRecord = true
 	_, err = reader.Read()
 	if err != nil {
 		if errors.Is(err, io.EOF) {
