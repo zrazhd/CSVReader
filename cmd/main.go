@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
 func main() {
 	// file, err := os.Open("data.csv")
 	// if err != nil {
@@ -28,9 +23,4 @@ func main() {
 	// 	}
 	// 	fmt.Println(record[4] == "")
 	// }
-	val, err := time.Parse("1/02/2006 15:04", "3/20/2021 18:21")
-	if err != nil {
-		fmt.Println("Incorrect time")
-	}
-	fmt.Println(val)
 }

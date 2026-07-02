@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func run {
+func run() {
 	file, err := os.Open("data.csv")
 	if err != nil {
 		fmt.Println("Error with opening file")
