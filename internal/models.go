@@ -18,3 +18,10 @@ type Company struct {
 	Street       string
 	Building     string
 }
+
+type Stats struct {
+	TotalRows     int
+	NotParsedRows int
+	InvalidRows   int
+	SuccessRows   int
+}
