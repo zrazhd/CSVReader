@@ -73,7 +73,7 @@ func Validate(c Company) error {
 
 	//Organization
 	if strings.TrimSpace(c.Organization) == "" {
-		return fmt.Errorf("Organization can't empty")
+		return fmt.Errorf("Organization can't be empty")
 	}
 
 	//Rating

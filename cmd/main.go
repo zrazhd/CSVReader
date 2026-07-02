@@ -1,26 +1,20 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/zrazhd/CSVReader/internal"
+)
+
 func main() {
-	// file, err := os.Open("data.csv")
-	// if err != nil {
-	// 	fmt.Println("Error with opening file")
-	// 	return
-	// }
-	// defer func() {
-	// 	if err := file.Close(); err != nil {
-	// 		fmt.Println("Error with closing file")
-	// 		return
-	// 	}
-	// }()
+	stats, err := internal.Run("data.csv")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	// reader := csv.NewReader(file)
-
-	// for {
-	// 	record, err := reader.Read()
-	// 	if err != nil {
-	// 		fmt.Println("Error with reading line")
-	// 		break
-	// 	}
-	// 	fmt.Println(record[4] == "")
-	// }
+	fmt.Printf("Total Rows: %v\n", stats.TotalRows)
+	fmt.Printf("Not Parsed Rows: %v\n", stats.NotParsedRows)
+	fmt.Printf("Invalid Rows: %v\n", stats.InvalidRows)
+	fmt.Printf("Success Rows: %v\n", stats.SuccessRows)
 }

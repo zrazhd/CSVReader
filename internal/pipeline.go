@@ -2,32 +2,62 @@ package internal
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
+	"io"
 	"os"
 )
 
-func run() {
-	file, err := os.Open("data.csv")
+type Stats struct {
+	TotalRows     int
+	NotParsedRows int
+	InvalidRows   int
+	SuccessRows   int
+}
+
+func Run(path string) (Stats, error) {
+	var stats Stats
+	file, err := os.Open(path)
 	if err != nil {
-		fmt.Println("Error with opening file")
-		return
+		return stats, fmt.Errorf("Error with opening file: %w", err)
 	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			fmt.Println("Error with closing file")
-			return
-		}
-	}()
+	defer file.Close()
 
 	reader := csv.NewReader(file)
-
-	for i := 0; i < 10; i++ {
-		record, err := reader.Read()
-		if err != nil {
-			fmt.Println("Error with reading line")
-			break
+	_, err = reader.Read()
+	if err != nil {
+		if errors.Is(err, io.EOF) {
+			return stats, nil
 		}
-		fmt.Println(record)
+		return stats, fmt.Errorf("Failed to read line: %w", err)
 	}
 
+	for {
+		record, err := reader.Read()
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				return stats, nil
+			}
+			return stats, fmt.Errorf("Failed to read line: %w", err)
+		}
+
+		stats.TotalRows++
+
+		company, err := Parse(record)
+		if err != nil {
+			stats.NotParsedRows++
+			continue
+		}
+
+		err = Validate(company)
+		if err != nil {
+			stats.InvalidRows++
+			continue
+		}
+
+		Transform(&company)
+
+		stats.SuccessRows++
+
+	}
 }
